@@ -1,4 +1,4 @@
-const APIEntry = 'http://trou.ltd:7000/'
+const APIEntry = 'http://live.trou.ltd:7001/'
 const API_LIVE_STATUS = APIEntry + 'live/status'
 const API_LIVE_CREATE = APIEntry + 'live/create'
 const API_LIVE_MESSAGE = APIEntry + 'live/message'
