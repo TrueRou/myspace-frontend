@@ -4,6 +4,10 @@ import PageLogin from "./views/PageLogin.vue"
 import PageRegister from "./views/PageRegister.vue"
 import PageMessage from "./views/PageMessage.vue"
 import PageCreateLive from "./views/PageCreateLive.vue"
+import { useUserStore } from "./stores/UserStore.js"
+import config from './config'
+
+const userStore = useUserStore()
 
 const routes = [
   { path: '/', component: PageLive },
@@ -18,11 +22,21 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from, next) =>
+{
   const token = localStorage.getItem('token');
   const isLogin = !!token;
 
-  if (to.path == '/message' && !isLogin) {
+  if (isLogin && userStore.userInfo == {})
+  {
+    this.axios.get(config.API_USER_ME, { headers: { "Authorization": `Bearer ${token}` } }).then((response) =>
+    {
+      userStore.userInfo = response.data
+    })
+  }
+
+  if (to.path == '/message' && !isLogin)
+  {
     next("/login");
   }
   next()

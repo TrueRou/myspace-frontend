@@ -3,7 +3,8 @@
     <div class="nav">
       <el-menu :router="true" id="nav-menu" default-active="1" mode="horizontal">
         <el-menu-item route="/" index="1">直播</el-menu-item>
-        <el-menu-item route="/message" index="3">短信</el-menu-item>
+        <el-menu-item route="/message" v-if="authorized && userStore['message_available']" index="3">短信</el-menu-item>
+        <el-menu-item route="/chatgpt" v-if="authorized && userStore['chat_available']" index="3">ChatGPT</el-menu-item>
       </el-menu>
       <div class="nav-user-login">
         <el-button type="primary" v-if="!authorized" @click="login_click">
@@ -12,8 +13,8 @@
         <el-button type="primary" v-if="!authorized" @click="register_click">
           注册
         </el-button>
-        <el-button type="primary" v-if="authorized" @click="create_live_click">
-          创建直播
+        <el-button type="primary" v-if="authorized && userStore['live_available']" @click="create_live_click">
+          直播
         </el-button>
         <el-button type="info" v-if="authorized" @click="logout_click">
           登出
@@ -26,25 +27,34 @@
 </template>
 
 <script>
+import { useUserStore } from '../stores/UserStore';
+const userStore = useUserStore()
+
 export default {
   name: 'TheNavBar',
   computed: {
-    authorized() {
+    authorized()
+    {
       return localStorage.getItem('token') != null;
     },
   },
   methods: {
-    login_click() {
+    login_click()
+    {
       this.$router.push('/login')
     },
-    register_click() {
+    register_click()
+    {
       this.$router.push('/register')
     },
-    logout_click() {
+    logout_click()
+    {
       localStorage.removeItem('token')
+      userStore.userInfo = {}
       location.href = '/'
     },
-    create_live_click() {
+    create_live_click()
+    {
       this.$router.push('/create_live')
     },
   },
