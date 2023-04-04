@@ -129,7 +129,7 @@ export default {
                 enableWorker: true,
                 enableStashBuffer: false,
                 stashInitialSize: 128,
-                url: 'ws://trou.ltd:1936/live/live.flv',
+                url: 'wss://content.nogu.dev:8443/live/live.flv',
             });
             flvPlayer.attachMediaElement(videoElement);
             flvPlayer.load();
