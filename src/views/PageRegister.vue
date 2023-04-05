@@ -22,7 +22,8 @@
 import config from '../config'
 
 export default {
-    data() {
+    data()
+    {
         return {
             //存储数据的对象
             rulesForm: {
@@ -45,7 +46,8 @@ export default {
         };
     },
     methods: {
-        submitForm(formName) {
+        submitForm(formName)
+        {
             var params = {
                 "email": this.rulesForm.email,
                 "password": this.rulesForm.password,
@@ -54,11 +56,15 @@ export default {
                 "is_verified": false,
                 "username": this.rulesForm.name
             }
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.axios.post(config.API_USER_REGISTER, params).then((response) => {
-                        this.$router.push('/')
-                    }).catch((response) => {
+            this.$refs[formName].validate((valid) =>
+            {
+                if (valid)
+                {
+                    this.axios.post(config.API_USER_REGISTER, params).then((response) =>
+                    {
+                        location.href = '/'
+                    }).catch((response) =>
+                    {
                         this.error = true
                     })
                 }
@@ -81,5 +87,4 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-</style>
+}</style>

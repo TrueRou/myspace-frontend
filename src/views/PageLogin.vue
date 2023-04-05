@@ -54,7 +54,6 @@ export default {
                     this.axios.post(config.API_USER_LOGIN, params).then((response) =>
                     {
                         localStorage.setItem('token', response.data['access_token']);
-                        this.$router.push('/')
                         location.href = '/'
                     }).catch((response) =>
                     {

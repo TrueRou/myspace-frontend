@@ -1,4 +1,4 @@
-const APIEntry = 'https://content.nogu.dev/myspace/'
+const APIEntry = 'https://turou.nogu.dev/api/myspace/'
 const API_LIVE_STATUS = APIEntry + 'live/status'
 const API_LIVE_CREATE = APIEntry + 'live/create'
 const API_LIVE_MESSAGE = APIEntry + 'live/message'
