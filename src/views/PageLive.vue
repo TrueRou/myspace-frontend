@@ -7,11 +7,8 @@
                         <el-row>
                             <span class="live-title">{{ title }}</span>
                         </el-row>
-                        <el-button type="primary" v-if="!withAuth" @click="login_click">
-                            登录
-                        </el-button>
-                        <el-button type="info" v-if="withAuth" @click="logout_click">
-                            登出
+                        <el-button type="primary" v-if="canCreateLive" @click="login_click">
+                            创建直播
                         </el-button>
                     </div>
                 </template>
@@ -56,6 +53,7 @@
   
 <script>
 import config from '../config'
+import { useUserStore } from '../stores/UserStore';
 
 export default {
     name: 'PageLive',
@@ -63,6 +61,10 @@ export default {
         withAuth()
         {
             return localStorage.getItem('token') != null
+        },
+        canCreateLive()
+        {
+            return useUserStore().userInfo['live_available']
         }
     },
     data()
@@ -82,7 +84,7 @@ export default {
         logout_click()
         {
             localStorage.removeItem('token')
-            userStore.userInfo = {}
+            useUserStore().userInfo = {}
             location.href = '/'
         },
         login_click()
