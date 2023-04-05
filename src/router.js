@@ -7,8 +7,6 @@ import PageCreateLive from "./views/PageCreateLive.vue"
 import { useUserStore } from "./stores/UserStore.js"
 import config from './config'
 
-const userStore = useUserStore()
-
 const routes = [
   { path: '/', component: PageLive },
   { path: '/login', component: PageLogin },
@@ -24,6 +22,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) =>
 {
+  const userStore = useUserStore()
   const token = localStorage.getItem('token');
   const isLogin = !!token;
 
@@ -33,6 +32,13 @@ router.beforeEach(async (to, from, next) =>
     {
       userStore.userInfo = response.data
     })
+    if (userStore.userInfo['chat_available'])
+    {
+      this.axios.get(config.API_CHATGPT_TOKEN, { headers: { "Authorization": `Bearer ${token}` } }).then((response) =>
+      {
+        localStorage.setItem('secret_token', response.data['token'])
+      })
+    }
   }
 
   if (to.path == '/message' && !isLogin)

@@ -1,8 +1,5 @@
 <template>
   <el-container>
-    <el-header>
-      <TheNavBar />
-    </el-header>
     <el-main>
       <router-view />
     </el-main>
@@ -10,12 +7,8 @@
 </template>
 
 <script>
-import TheNavBar from './components/TheNavBar.vue';
 export default {
-  name: 'App',
-  components: {
-    TheNavBar,
-  },
+  name: 'App'
 };
 </script>
 

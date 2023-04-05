@@ -3,28 +3,24 @@
         <el-col :xs="24" :span="18">
             <el-card>
                 <template #header>
-                    <div>
+                    <div style="display: flex; justify-content: space-between;">
                         <el-row>
-                            <span class="live-title">{{title}}</span>
+                            <span class="live-title">{{ title }}</span>
                         </el-row>
+                        <el-button type="primary" v-if="!withAuth" @click="login_click">
+                            登录
+                        </el-button>
+                        <el-button type="info" v-if="withAuth" @click="logout_click">
+                            登出
+                        </el-button>
                     </div>
                 </template>
                 <div>
-                    <video style="width: 100%" id="videoElement" controls></video>
+                    <video style="width: 100%;" id="videoElement" controls></video>
                 </div>
             </el-card>
         </el-col>
         <el-col :xs="24" :span="6">
-            <el-card shadow="always" :body-style="{ padding: '20px' }">
-                <template #header>
-                    <span class="live-right-subtitle">直播状态</span>
-                </template>
-                <span>开播时间: </span> {{getFormatedTime()}}
-                <br />
-                <span>直播人: </span> {{owner}}
-                <br />
-                <span>简介: </span> {{description}}
-            </el-card>
             <el-card shadow="always" :body-style="{ padding: '20px' }">
                 <template #header>
                     <span class="live-right-subtitle">观看用户</span>
@@ -44,10 +40,10 @@
                 <template #header>
                     <span class="live-right-subtitle">聊天室</span>
                 </template>
-                <div style="height: 435px">
+                <div style="height: 535px">
                     <div class="panel-block" v-for="item in messages">
                         <p style="word-break: break-word;">
-                            {{item['username']}}: {{item['message']}}
+                            {{ item['username'] }}: {{ item['message'] }}
                         </p>
                     </div>
                 </div>
@@ -64,11 +60,13 @@ import config from '../config'
 export default {
     name: 'PageLive',
     computed: {
-        withAuth() {
+        withAuth()
+        {
             return localStorage.getItem('token') != null
         }
     },
-    data() {
+    data()
+    {
         return {
             inputMessage: '',
             notLoggedUserCount: 0,
@@ -81,11 +79,24 @@ export default {
         }
     },
     methods: {
-        refreshData() {
+        logout_click()
+        {
+            localStorage.removeItem('token')
+            userStore.userInfo = {}
+            location.href = '/'
+        },
+        login_click()
+        {
+            this.$router.push('/login')
+        },
+        refreshData()
+        {
             var token = localStorage.getItem('token')
             var settings = this.withAuth ? { headers: { "Authorization": `Bearer ${token}` } } : {}
-            this.axios.get(config.API_LIVE_STATUS, settings).then((response) => {
-                if (!response.data['online'] && this.withAuth) {
+            this.axios.get(config.API_LIVE_STATUS, settings).then((response) =>
+            {
+                if (!response.data['online'] && this.withAuth)
+                {
                     localStorage.removeItem('token')
                     location.reload()
                 }
@@ -98,29 +109,36 @@ export default {
                 this.notLoggedUserCount = response.data['not_logged_user_count']
             })
         },
-        sendData() {
-            if (this.withAuth) {
+        sendData()
+        {
+            if (this.withAuth)
+            {
                 var token = localStorage.getItem('token')
                 this.axios.post(config.API_LIVE_MESSAGE + '?message=' + this.inputMessage, {},
-                    { headers: { "Authorization": `Bearer ${token}` } }).then((response) => {
+                    { headers: { "Authorization": `Bearer ${token}` } }).then((response) =>
+                    {
                         this.inputMessage = ''
                         this.refreshData()
                     })
             }
         },
-        getFormatedTime() {
+        getFormatedTime()
+        {
             var date = new Date((new Date(this.beginningTime).getTime()) + 8 * 60 * 60 * 1000).toJSON();
             var timeft = new Date(+new Date(date)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
             return timeft
         }
     },
-    mounted() {
+    mounted()
+    {
         this.refreshData()
-        setInterval(() => {
+        setInterval(() =>
+        {
             this.refreshData()
         }, 2000);
         const player = document.getElementById('videoElement');
-        if (flvjs.isSupported()) {
+        if (flvjs.isSupported())
+        {
             const flvPlayer = flvjs.createPlayer({
                 type: 'flv',
                 isLive: true,
@@ -139,6 +157,12 @@ export default {
 </script>
   
 <style>
+@media screen and (min-width: 735px) {
+    #videoElement {
+        height: 700px;
+    }
+}
+
 .live-title {
     font-size: var(--el-font-size-extra-large);
 }
