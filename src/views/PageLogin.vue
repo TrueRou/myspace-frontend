@@ -1,5 +1,5 @@
 <template>
-    <div class="login-section login-card">
+    <div style="background-color: white;" class="login-section login-card">
         <el-form label-position="top" label-width="100px" class="demo-ruleForm" :rules="rules" :model="rulesForm"
             status-icon ref="ruleForm">
             <el-form-item label="邮箱" prop="email">
@@ -20,7 +20,8 @@ import config from '../config'
 import Qs from 'qs';
 
 export default {
-    data() {
+    data()
+    {
         return {
             error: false,
             rulesForm: {
@@ -39,19 +40,24 @@ export default {
         };
     },
     methods: {
-        submitForm(formName) {
+        submitForm(formName)
+        {
             var params = Qs.stringify({
                 'username': this.rulesForm.email,
                 'password': this.rulesForm.password
             })
-            
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.axios.post(config.API_USER_LOGIN, params).then((response) => {
+
+            this.$refs[formName].validate((valid) =>
+            {
+                if (valid)
+                {
+                    this.axios.post(config.API_USER_LOGIN, params).then((response) =>
+                    {
                         localStorage.setItem('token', response.data['access_token']);
                         this.$router.push('/')
                         location.href = '/'
-                    }).catch((response) => {
+                    }).catch((response) =>
+                    {
                         this.error = true
                     })
                 }
@@ -74,5 +80,4 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-</style>
+}</style>
