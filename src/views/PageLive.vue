@@ -7,7 +7,7 @@
                         <el-row>
                             <span class="live-title">{{ title }}</span>
                         </el-row>
-                        <el-button type="primary" v-if="canCreateLive" @click="login_click">
+                        <el-button type="primary" v-if="canCreateLive" @click="create_live_click">
                             创建直播
                         </el-button>
                     </div>
