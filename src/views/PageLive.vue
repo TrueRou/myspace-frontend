@@ -81,15 +81,9 @@ export default {
         }
     },
     methods: {
-        logout_click()
+        create_live_click()
         {
-            localStorage.removeItem('token')
-            useUserStore().userInfo = {}
-            location.href = '/'
-        },
-        login_click()
-        {
-            this.$router.push('/login')
+            this.$router.push('/create_live')
         },
         refreshData()
         {

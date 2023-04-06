@@ -7,9 +7,6 @@
             <el-form-item label="直播简介" prop="description">
                 <el-input type="text" v-model="description"></el-input>
             </el-form-item>
-            <el-form-item label="直播者" prop="owner">
-                <el-input type="text" v-model="owner"></el-input>
-            </el-form-item>
             <el-form-item>
                 <el-button style="width: 100%" type="primary" @click="submitForm()">创建</el-button>
             </el-form-item>
@@ -18,18 +15,23 @@
 </template>
 <script>
 import config from '../config'
+import { useUserStore } from '../stores/UserStore';
 
 export default {
-    data() {
+    data()
+    {
         return {
             title: '',
-            owner: '',
             description: ''
         };
     },
     methods: {
-        submitForm() {
-            this.axios.post(config.API_LIVE_CREATE + '?title=' + this.title + '&description=' + this.description + '&owner=' + this.owner).then((response) => {
+        submitForm()
+        {
+            const userStore = useUserStore()
+            const owner = userStore.userInfo['username']
+            this.axios.post(config.API_LIVE_CREATE + '?title=' + this.title + '&description=' + this.description + '&owner=' + owner).then((response) =>
+            {
                 this.$router.push('/')
             })
         }
