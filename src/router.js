@@ -5,8 +5,6 @@ import PageRegister from "./views/PageRegister.vue"
 import PageMessage from "./views/PageMessage.vue"
 import PageCreateLive from "./views/PageCreateLive.vue"
 import { useUserStore } from "./stores/UserStore.js"
-import config from './config'
-import axios from 'axios'
 
 const routes = [
   { path: '/', component: PageLive },
@@ -24,8 +22,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) =>
 {
   const userStore = useUserStore()
-  const token = localStorage.getItem('token');
-  const isLogin = !!token;
+  userStore.findUser()
 
   if (to.path == '/logout')
   {
@@ -34,19 +31,11 @@ router.beforeEach(async (to, from, next) =>
     location.href = '/'
   }
 
-  if (isLogin)
-  {
-    axios.get(config.API_USER_ME, { headers: { "Authorization": `Bearer ${token}` } }).then((response) =>
-    {
-      userStore.userInfo = response.data
-      userStore.checkChatGPT()
-    })
-  }
-
-  if (to.path == '/message' && !isLogin)
+  if (to.path == '/message' && !userStore.isLogin())
   {
     next("/login");
   }
+
   next()
 })
 

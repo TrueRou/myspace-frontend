@@ -18,6 +18,7 @@
 <script>
 import config from '../config'
 import Qs from 'qs';
+import { useUserStore } from '../stores/UserStore';
 
 export default {
     data()
@@ -40,26 +41,30 @@ export default {
         };
     },
     methods: {
-        submitForm(formName)
+        async submitForm(formName)
         {
+            const userStore = useUserStore()
+
             var params = Qs.stringify({
                 'username': this.rulesForm.email,
                 'password': this.rulesForm.password
             })
 
-            this.$refs[formName].validate((valid) =>
+            this.$refs[formName].validate(async (valid) =>
             {
                 if (valid)
                 {
-                    this.axios.post(config.API_USER_LOGIN, params).then((response) =>
+                    try
                     {
+                        const response = await this.axios.post(config.API_USER_LOGIN, params)
                         localStorage.setItem('token', response.data['access_token']);
+                        await userStore.findUser()
                         location.href = '/'
-                    }).catch((response) =>
+                    } catch (error)
                     {
-                        console.log(response)
+                        console.log(error.response.data.error)
                         this.error = true
-                    })
+                    }
                 }
             });
         }
