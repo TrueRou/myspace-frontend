@@ -39,15 +39,7 @@ router.beforeEach(async (to, from, next) =>
     axios.get(config.API_USER_ME, { headers: { "Authorization": `Bearer ${token}` } }).then((response) =>
     {
       userStore.userInfo = response.data
-    })
-
-  }
-
-  if (userStore.userInfo['chat_available'])
-  {
-    axios.get(config.API_CHATGPT_TOKEN, { headers: { "Authorization": `Bearer ${token}` } }).then((response) =>
-    {
-      localStorage.setItem('secret_token', response.data['token'])
+      userStore.checkChatGPT()
     })
   }
 
