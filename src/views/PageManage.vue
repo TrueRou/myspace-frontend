@@ -28,51 +28,30 @@
 import config from '../config'
 import {ref} from 'vue'
 
-const title = ref('')
-const owner = ref('')
-const description = ref('')
 const userList = ref([])
 
 onload(()=>{
   getAllUser()
 })
 
-const getAllUser = ()=>{
-    //getUserList
-    let Users = [
-      {
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-      {
-        date: '2016-05-02',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-      {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-      {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-    ]
-  this.userList = Users
+const getAllUser = async ()=>{
+  const token = localStorage.getItem('token')
+  const response = await this.axios.get(config.API_USER_ALL, { headers: { "Authorization": `Bearer ${token}` } })
+  this.userList = response.data
 }
 
-const handleEdit = (index,row)=>{
-  console.log("index",index + " row:",row)
-  //row Full Object
-  //index: current index
+const handleEdit = async (object)=>{
+  const token = localStorage.getItem('token')
+  const options = { headers: { "Authorization": `Bearer ${token}` } }
+  const body = JSON.stringify(object)
+  const id = object.id
+  await this.axios.patch(config.API_USER + `/${id}`, body, options)
 }
-const handleDelete = (index,row)=>{
-  console.log("index",index + " row:",row)
-  //row Full Object
-  //index: current index
+const handleDelete = async (object)=>{
+  const token = localStorage.getItem('token')
+  const options = { headers: { "Authorization": `Bearer ${token}` } }
+  const id = object.id
+  await this.axios.delete(config.API_USER + `/${id}`, body, options)
 }
 
 </script>
