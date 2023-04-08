@@ -5,6 +5,7 @@ import PageRegister from "./views/PageRegister.vue"
 import PageMessage from "./views/PageMessage.vue"
 import PageCreateLive from "./views/PageCreateLive.vue"
 import { useUserStore } from "./stores/UserStore.js"
+import PageManage from "./views/PageManage.vue";
 
 const routes = [
   { path: '/', component: PageLive },
@@ -12,6 +13,7 @@ const routes = [
   { path: '/register', component: PageRegister },
   { path: '/message', component: PageMessage },
   { path: '/create_live', component: PageCreateLive },
+  { path: '/manage',component: PageManage},
 ]
 
 const router = createRouter({
