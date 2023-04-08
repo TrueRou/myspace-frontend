@@ -175,7 +175,6 @@ const getAllUser = async () =>
   const token = localStorage.getItem('token')
   const response = await axios.get(config.API_USER_ALL, { headers: { "Authorization": `Bearer ${token}` } })
   userList.value = response.data
-  console.log(userList)
 }
 const handleEdit = async (object) =>
 {
@@ -184,12 +183,14 @@ const handleEdit = async (object) =>
   const body = JSON.stringify(object)
   const id = object.id
   await axios.patch(config.API_USER + `/${id}`, body, options)
+  await getAllUser()
 }
 const handleDelete = async (object) =>
 {
   const token = localStorage.getItem('token')
   const options = { headers: { "Authorization": `Bearer ${token}` } }
   const id = object.id
-  await axios.delete(config.API_USER + `/${id}`, body, options)
+  await axios.delete(config.API_USER + `/${id}`, options)
+  await getAllUser()
 }
 </script>
