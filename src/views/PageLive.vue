@@ -38,7 +38,7 @@
                 <template #header>
                     <span class="live-right-subtitle">聊天室</span>
                 </template>
-                <div>
+                <div style="height: 530px;">
                     <div style="height: 100%" class="panel-block" v-for="item in messages">
                         <p style="word-break: break-word;">
                             {{ item['username'] }}: {{ item['message'] }}
