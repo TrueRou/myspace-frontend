@@ -4,8 +4,16 @@
       <el-table :data="userList" :border="true" :default-sort="{ prop: 'date', order: 'descending' }"
         style="width: 100%; display: flex; justify-content: center;">
         <el-table-column prop="id" label="id" width="400" />
-        <el-table-column prop="username" label="用户名" width="200" />
-        <el-table-column prop="email" label="邮箱" />
+        <el-table-column prop="username" label="用户名" width="200">
+          <template #default="scope">
+            <el-input v-model="scope.row.username"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="email" label="邮箱">
+          <template #default="scope">
+            <el-input v-model="scope.row.email"></el-input>
+          </template>
+        </el-table-column>
         <el-table-column width="120" prop="is_superuser" label="超级用户">
           <template #default="scope">
             <el-switch v-model="scope.row.is_superuser" />
