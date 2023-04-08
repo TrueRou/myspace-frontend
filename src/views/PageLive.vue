@@ -138,16 +138,40 @@ export default {
         if (mpegts.isSupported())
         {
             var player = mpegts.createPlayer({
-                type: 'mse',  // could also be mpegts, m2ts, flv
+                type: 'flv',  // could also be mpegts, m2ts, flv
                 isLive: true,
                 url: 'wss://content.nogu.dev:8443/live/live.flv',
-                enableWorker: true,
+                enableWorker: true, // 启用分离的线程进行转换
                 enableStashBuffer: false,
+                stashInitialSize: 128,
+                liveBufferLatencyChasing: true,
+                accurateSeek: true,
             });
             player.attachMediaElement(videoElement);
             player.load();
             player.play();
         }
+        videoElement.addEventListener("progress", () =>
+        {
+            let end = player.buffered.end(0); //获取当前buffered值(缓冲区末尾)
+            let delta = end - player.currentTime; //获取buffered与当前播放位置的差值
+
+            // 延迟过大，通过跳帧的方式更新视频
+            if (delta > 10 || delta < 0)
+            {
+                this.player.currentTime = this.player.buffered.end(0) - 1;
+                return;
+            }
+
+            // 追帧
+            if (delta > 1)
+            {
+                videoElement.playbackRate = 1.1;
+            } else
+            {
+                videoElement.playbackRate = 1;
+            }
+        });
     }
 };
 </script>
