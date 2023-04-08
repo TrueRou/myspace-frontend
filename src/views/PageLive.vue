@@ -13,7 +13,8 @@
                     </div>
                 </template>
                 <div>
-                    <video style="width: 100%;" id="videoElement" controls></video>
+                    <video style="object-fit: cover; width: 100%; height: 100%;" muted autoplay controls
+                        id="videoElement"></video>
                 </div>
             </el-card>
         </el-col>
@@ -37,8 +38,8 @@
                 <template #header>
                     <span class="live-right-subtitle">聊天室</span>
                 </template>
-                <div style="height: 555px">
-                    <div class="panel-block" v-for="item in messages">
+                <div>
+                    <div style="height: 100%" class="panel-block" v-for="item in messages">
                         <p style="word-break: break-word;">
                             {{ item['username'] }}: {{ item['message'] }}
                         </p>
@@ -53,6 +54,7 @@
   
 <script>
 import config from '../config'
+import mpegts from 'mpegts.js'
 import { useUserStore } from '../stores/UserStore';
 
 export default {
@@ -132,21 +134,19 @@ export default {
         {
             this.refreshData()
         }, 2000);
-        const player = document.getElementById('videoElement');
-        if (flvjs.isSupported())
+        const videoElement = document.getElementById('videoElement');
+        if (mpegts.isSupported())
         {
-            const flvPlayer = flvjs.createPlayer({
-                type: 'flv',
+            var player = mpegts.createPlayer({
+                type: 'mse',  // could also be mpegts, m2ts, flv
                 isLive: true,
-                hasAudio: true,
-                hasVideo: true,
+                url: 'wss://content.nogu.dev:8443/live/live.flv',
                 enableWorker: true,
                 enableStashBuffer: false,
-                stashInitialSize: 128,
-                url: 'wss://content.nogu.dev:8443/live/live.flv',
             });
-            flvPlayer.attachMediaElement(videoElement);
-            flvPlayer.load();
+            player.attachMediaElement(videoElement);
+            player.load();
+            player.play();
         }
     }
 };

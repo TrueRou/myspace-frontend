@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "element-plus": "^2.2.16",
+    "mpegts.js": "^1.7.3",
     "pinia": "^2.0.33",
     "qs": "^6.11.0",
     "vue": "^3.2.38",
