@@ -18,36 +18,45 @@
                 </div>
             </el-card>
         </el-col>
-        <el-col :xs="24" :span="6">
-            <el-card shadow="always" :body-style="{ padding: '20px' }">
-                <template #header>
-                    <span class="live-right-subtitle">观看用户</span>
-                </template>
-                <div style="overflow-y: auto; min-height: 20px">
-                    <div style="display: inline-block" class="panel-block">
-                        <el-tag v-for="item in online_users" type="success">
-                            {{ item.username }}
-                        </el-tag>
-                        <el-tag v-for="index of notLoggedUserCount" type="warning">
-                            未登录用户
-                        </el-tag>
+        <el-col :xs="24" :span="6" style="display: flex;">
+            <el-container style="flex-direction: column; display: flex;">
+                <el-card shadow="always" style="display: flex; height: 200px; flex-direction: column;"
+                    :body-style="{ padding: '20px' }">
+                    <template #header>
+                        <span class="live-right-subtitle">观看用户</span>
+                    </template>
+                    <div style="overflow-y: auto; min-height: 20px">
+                        <div style="display: inline-block" class="panel-block">
+                            <el-tag v-for="item in online_users" type="success">
+                                {{ item.username }}
+                            </el-tag>
+                            <el-tag v-for="index of notLoggedUserCount" type="warning">
+                                未登录用户
+                            </el-tag>
+                        </div>
                     </div>
-                </div>
-            </el-card>
-            <el-card shadow="always" :body-style="{ padding: '20px' }">
-                <template #header>
-                    <span class="live-right-subtitle">聊天室</span>
-                </template>
-                <div style="height: 530px;">
-                    <div style="height: 100%" class="panel-block" v-for="item in messages">
-                        <p style="word-break: break-word;">
-                            {{ item['username'] }}: {{ item['message'] }}
-                        </p>
+                </el-card>
+                <el-card style="display: flex; flex: 1; flex-direction: column;" shadow="always"
+                    :body-style="{ padding: '20px', display: 'flex', flex: '1', flexDirection: 'column' }">
+                    <template #header>
+                        <span class="live-right-subtitle">聊天室</span>
+                    </template>
+                    <div style="display: flex; flex-direction: column; justify-content: space-between; flex:1;">
+                        <div style="display: flex;">
+                            <div style="height: 100%" class="panel-block" v-for="item in messages">
+                                <p style="word-break: break-word;">
+                                    {{ item['username'] }}: {{ item['message'] }}
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: flex;">
+                            <el-input v-if="withAuth" v-model="inputMessage" @keyup.enter="sendData"
+                                placeholder="发送一条信息来参与聊天" />
+                            <el-input v-if="!withAuth" disabled placeholder="登录后才能参与聊天" />
+                        </div>
                     </div>
-                </div>
-                <el-input v-if="withAuth" v-model="inputMessage" @keyup.enter="sendData" placeholder="发送一条信息来参与聊天" />
-                <el-input v-if="!withAuth" disabled placeholder="登录后才能参与聊天" />
-            </el-card>
+                </el-card>
+            </el-container>
         </el-col>
     </el-row>
 </template>
