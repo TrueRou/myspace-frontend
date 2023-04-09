@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main>
+    <el-main style="padding:0;">
       <router-view />
     </el-main>
   </el-container>
