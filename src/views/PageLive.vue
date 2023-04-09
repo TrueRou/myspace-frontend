@@ -1,5 +1,5 @@
 <template>
-    <el-row :gutter="20">
+    <el-row :gutter="20" style="padding: 20px;">
         <el-col :xs="24" :span="18">
             <el-card>
                 <template #header>

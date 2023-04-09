@@ -2,24 +2,24 @@
   <div class="bg">
     <div class="body">
       <div class="login-form">
-        <el-form label-position="top" label-width="100px" class="demo-ruleForm" :rules="rules" :model="rulesForm"
-                 status-icon ref="ruleForm">
+        <el-form label-position="top" label-width="100px" class="demo-ruleForm" :rules="rules" :model="formContent"
+          status-icon ref="loginForm">
           <el-form-item prop="email">
             <div class="inputBox">
-              <input type="text" required="required">
+              <input type="text" v-model="formContent.email" required="required">
               <span>邮箱</span>
               <i></i>
             </div>
           </el-form-item>
           <el-form-item prop="password">
             <div class="inputBox">
-              <input type="text" required="required">
+              <input type="text" v-model="formContent.password" required="required">
               <span>密码</span>
               <i></i>
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button style="width: 100%" type="primary" @click="submitForm('ruleForm')">登录</el-button>
+            <el-button style="width: 100%" type="primary" @click="submitForm()">登录</el-button>
           </el-form-item>
           <el-tag v-if="error" class="ml-2" type="danger">登录失败, 可能是邮箱或密码错误</el-tag>
         </el-form>
@@ -45,13 +45,17 @@
 <script setup>
 import config from '../config'
 import Qs from 'qs';
-import {useUserStore} from '../stores/UserStore';
-import {onMounted, ref} from "vue";
+import { useUserStore } from '../stores/UserStore';
+import axios from 'axios';
+import { ref } from "vue";
 
 const userStore = useUserStore()
-const rulesForm = {email: '', password: ''}
-const rules = {email: [{required: true, message: '请填写邮箱', trigger: 'blur'},],
-  password: [{required: true, message: '请填写密码', trigger: 'blur'}, {
+const loginForm = ref()
+const formContent = ref({ email: '', password: '' })
+
+const rules = {
+  email: [{ required: true, message: '请填写邮箱', trigger: 'blur' },],
+  password: [{ required: true, message: '请填写密码', trigger: 'blur' }, {
     min: 5,
     max: 12,
     message: '密码的长度范围为5-12',
@@ -61,19 +65,24 @@ const rules = {email: [{required: true, message: '请填写邮箱', trigger: 'bl
 let error = ref(false)
 
 
-const submitForm = async (formName) => {
+const submitForm = async () =>
+{
   var params = Qs.stringify({
-    'username': rulesForm.email,
-    'password': rulesForm.password
+    'username': formContent.value.email,
+    'password': formContent.value.password
   })
-  this.$refs[formName].validate(async (valid) => {
-    if (valid) {
-      try {
-        const response = await this.axios.post(config.API_USER_LOGIN, params)
+  loginForm.value.validate(async (valid) =>
+  {
+    if (valid)
+    {
+      try
+      {
+        const response = await axios.post(config.API_USER_LOGIN, params)
         localStorage.setItem('token', response.data['access_token']);
         await userStore.findUser()
         location.href = '/'
-      } catch (e) {
+      } catch (e)
+      {
         console.log(e.response.data.error)
         error = true
       }
@@ -141,8 +150,8 @@ const submitForm = async (formName) => {
   font-size: 1.4em;
 }
 
-.inputBox input:valid ~ span,
-.inputBox input:focus ~ span {
+.inputBox input:valid~span,
+.inputBox input:focus~span {
   color: #2196f3;
   transform: translateY(-16px);
   font-size: 1em;
@@ -169,8 +178,8 @@ const submitForm = async (formName) => {
   transition: 0.5s;
 }
 
-.inputBox input:valid ~ i::before,
-.inputBox input:focus ~ i::before {
+.inputBox input:valid~i::before,
+.inputBox input:focus~i::before {
   left: 0;
 }
 
