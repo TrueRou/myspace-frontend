@@ -86,7 +86,7 @@ const submitForm = async () =>
 .bg {
   background-size: cover;
   /*也许之后会改成随机url？*/
-  background-image: url(https://img.paulzzh.tech/touhou/random);
+  background-image: url(https://api.likepoems.com/img/pc);
 }
 
 .body {

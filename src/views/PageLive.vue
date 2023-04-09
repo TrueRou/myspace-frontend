@@ -87,6 +87,7 @@ export default {
             beginningTime: '',
             description: '',
             owner: '',
+            liveLink: '',
             online_users: [],
             messages: []
         }
@@ -95,6 +96,12 @@ export default {
         create_live_click()
         {
             this.$router.push('/create_live')
+        },
+        async fetchLiveLink()
+        {
+            var token = localStorage.getItem('token')
+            const response = await this.axios.get(config.API_LIVE_LINK, { headers: { "Authorization": `Bearer ${token}` } })
+            this.liveLink = response.data.link
         },
         refreshData()
         {
@@ -136,9 +143,10 @@ export default {
             return timeft
         }
     },
-    mounted()
+    async mounted()
     {
         this.refreshData()
+        await this.fetchLiveLink()
         setInterval(() =>
         {
             this.refreshData()
@@ -149,7 +157,7 @@ export default {
             var player = mpegts.createPlayer({
                 type: 'flv',  // could also be mpegts, m2ts, flv
                 isLive: true,
-                url: 'wss://content.nogu.dev:8443/live/live.flv',
+                url: this.liveLink,
                 enableWorker: true, // 启用分离的线程进行转换
                 enableStashBuffer: false,
                 stashInitialSize: 128,

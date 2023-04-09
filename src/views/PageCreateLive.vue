@@ -5,10 +5,10 @@
                 <el-input class="input-box" type="text" v-model="formContent.title"></el-input>
             </el-form-item>
             <el-form-item class="form-item" label="直播简介" prop="description">
-                <el-input class="input-box" type="password" v-model="formContent.description"></el-input>
+                <el-input class="input-box" type="text" v-model="formContent.description"></el-input>
             </el-form-item>
             <el-form-item class="form-item" label="直播流地址" prop="link">
-                <el-select v-model="formContent.link" filterable placeholder="">
+                <el-select v-model="formContent.link">
                     <el-option v-for="item in linkOptions" :key="item.link" :label="item.label" :value="item.link" />
                 </el-select>
             </el-form-item>
@@ -22,6 +22,7 @@
 <script setup>
 import config from '../config'
 import { onMounted, ref } from "vue";
+import { useRouter } from 'vue-router'
 import axios from "axios";
 
 let error = ref(false)
@@ -33,6 +34,8 @@ const rules = {
 const formContent = ref({ title: '', description: '', link: '' })
 const linkOptions = ref([])
 
+const router = useRouter()
+
 const submitForm = async () =>
 {
     var params = {
@@ -42,13 +45,19 @@ const submitForm = async () =>
     }
     const token = localStorage.getItem('token')
     await axios.post(config.API_LIVE_CREATE, params, { headers: { "Authorization": `Bearer ${token}` } })
-    this.$router.push('/')
+    router.push('/')
 }
 
 const getLiveLinks = async () =>
 {
+    const token = localStorage.getItem('token')
     const response = await axios.get(config.API_LIVE_LINKS, { headers: { "Authorization": `Bearer ${token}` } })
-    linkOptions.value = response.data
+    linkOptions.value = response.data.links
+
+    if (linkOptions.value.length > 0)
+    {
+        formContent.value.link = linkOptions.value[0].link
+    }
 }
 
 onMounted(() =>
@@ -79,7 +88,7 @@ onMounted(() =>
 .bg {
     background-size: cover;
     /*也许之后会改成随机url？*/
-    background-image: url(https://img.paulzzh.tech/touhou/random);
+    background-image: url(https://api.likepoems.com/img/pc);
 }
 
 .body {

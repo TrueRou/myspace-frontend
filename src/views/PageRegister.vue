@@ -1,25 +1,7 @@
 <template>
-<!--    <div class="register-section register-card">-->
-<!--        <el-form label-position="top" label-width="100px" class="demo-ruleForm" :rules="rules" :model="rulesForm"-->
-<!--            status-icon ref="ruleForm">-->
-<!--            <el-form-item label="邮箱" prop="email">-->
-<!--                <el-input type="text" v-model="rulesForm.email"></el-input>-->
-<!--            </el-form-item>-->
-<!--            <el-form-item label="用户名" prop="name">-->
-<!--                <el-input type="text" v-model="rulesForm.name"></el-input>-->
-<!--            </el-form-item>-->
-<!--            <el-form-item label="密码" prop="password">-->
-<!--                <el-input type="password" v-model="rulesForm.password"></el-input>-->
-<!--            </el-form-item>-->
-<!--            <el-form-item>-->
-<!--                <el-button style="width: 100%" type="primary" @click="submitForm('ruleForm')">注册</el-button>-->
-<!--            </el-form-item>-->
-<!--            <el-tag v-if="error" class="ml-2" type="danger">注册失败, 可能是已经有相同邮箱的用户了</el-tag>-->
-<!--        </el-form>-->
-<!--    </div>-->
   <div class="body bg">
-    <el-form class="register-form" label-position="top" label-width="100px" :rules="rules" :model="formContent" status-icon
-             ref="registerForm">
+    <el-form class="register-form" label-position="top" label-width="100px" :rules="rules" :model="formContent"
+      status-icon ref="registerForm">
       <el-form-item class="form-item" label="用户名" prop="name">
         <el-input class="input-box" type="name" v-model="formContent.name"></el-input>
       </el-form-item>
@@ -38,10 +20,10 @@
 </template>
 <script setup>
 import config from '../config'
-import {ref} from "vue";
+import { ref } from "vue";
 import axios from "axios";
 const registerForm = ref()
-const formContent = ref({ email: '', password: '' ,name:''})
+const formContent = ref({ email: '', password: '', name: '' })
 
 const rules = {
   email: [{ required: true, message: '请填写邮箱', trigger: 'blur' },],
@@ -51,33 +33,9 @@ const rules = {
     message: '密码的长度范围为5-12',
     trigger: 'blur'
   }],
-  name:[{required:true,message:'请填写用户名',trigger:'blur'},]
+  name: [{ required: true, message: '请填写用户名', trigger: 'blur' },]
 }
 let error = ref(false)
-// submitForm(formName)
-// {
-//   var params = {
-//     "email": this.rulesForm.email,
-//     "password": this.rulesForm.password,
-//     "is_active": true,
-//     "is_superuser": false,
-//     "is_verified": false,
-//     "username": this.rulesForm.name
-//   }
-//   this.$refs[formName].validate((valid) =>
-//   {
-//     if (valid)
-//     {
-//       this.axios.post(config.API_USER_REGISTER, params).then((response) =>
-//       {
-//         location.href = '/'
-//       }).catch((response) =>
-//       {
-//         this.error = true
-//       })
-//     }
-//   });
-// }
 const submitForm = async () =>
 {
   var params = {
@@ -129,7 +87,7 @@ const submitForm = async () =>
 .bg {
   background-size: cover;
   /*也许之后会改成随机url？*/
-  background-image: url(https://img.paulzzh.tech/touhou/random);
+  background-image: url(https://api.likepoems.com/img/pc);
 }
 
 .body {
