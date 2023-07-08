@@ -8,7 +8,7 @@
                 <el-input class="input-box" type="text" v-model="formContent.description"></el-input>
             </el-form-item>
             <el-form-item class="form-item" label="直播流地址" prop="link">
-                <el-select v-model="formContent.link">
+                <el-select v-model="formContent.link" filterable allow-create clearable>
                     <el-option v-for="item in linkOptions" :key="item.link" :label="item.label" :value="item.link" />
                 </el-select>
             </el-form-item>

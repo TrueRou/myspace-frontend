@@ -4,7 +4,6 @@
       <el-menu :router="true" id="nav-menu" default-active="1" mode="horizontal">
         <el-menu-item route="/" index="1">直播</el-menu-item>
         <el-menu-item route="/message" v-if="authorized && userStore['message_available']" index="3">短信</el-menu-item>
-        <el-menu-item route="/chatgpt" v-if="authorized && userStore['chat_available']" index="3">ChatGPT</el-menu-item>
       </el-menu>
       <div class="nav-user-login">
         <el-button type="primary" v-if="!authorized" @click="login_click">

@@ -7,14 +7,24 @@
                         <el-row>
                             <span class="live-title">{{ title }}</span>
                         </el-row>
-                        <el-button type="primary" v-if="canCreateLive" @click="create_live_click">
-                            创建直播
-                        </el-button>
+                        <div>
+                            <el-button type="primary" v-if="canCreateLive" @click="create_live_click">
+                                创建直播
+                            </el-button>
+                            <el-button type="info" v-if="canManage" @click="manage_click">
+                                管理用户
+                            </el-button>
+                            <el-button type="primary" v-if="!withAuth" @click="login_click">
+                                登录
+                            </el-button>
+                            <el-button type="info" v-if="!withAuth" @click="register_click">
+                                注册
+                            </el-button>
+                        </div>
                     </div>
                 </template>
                 <div>
-                    <video style="object-fit: cover; width: 100%; height: 100%;" muted autoplay controls
-                        id="videoElement"></video>
+                    <video style="object-fit: cover; width: 100%; height: 100%;" muted controls id="videoElement"></video>
                 </div>
             </el-card>
         </el-col>
@@ -36,6 +46,7 @@
                         </div>
                     </div>
                 </el-card>
+                <div style="height: 10px;"></div>
                 <el-card style="display: flex; flex: 1; flex-direction: column;" shadow="always"
                     :body-style="{ padding: '20px', display: 'flex', flex: '1', flexDirection: 'column' }">
                     <template #header>
@@ -65,6 +76,7 @@
 import config from '../config'
 import mpegts from 'mpegts.js'
 import { useUserStore } from '../stores/UserStore';
+import Hls from 'hls.js'
 
 export default {
     name: 'PageLive',
@@ -76,6 +88,10 @@ export default {
         canCreateLive()
         {
             return useUserStore().userInfo['live_available']
+        },
+        canManage()
+        {
+            return useUserStore().userInfo['manage_available']
         }
     },
     data()
@@ -96,6 +112,18 @@ export default {
         create_live_click()
         {
             this.$router.push('/create_live')
+        },
+        login_click()
+        {
+            this.$router.push('/login')
+        },
+        register_click()
+        {
+            this.$router.push('/register')
+        },
+        manage_click()
+        {
+            this.$router.push('/manage')
         },
         async fetchLiveLink()
         {
@@ -152,21 +180,20 @@ export default {
             this.refreshData()
         }, 2000);
         const videoElement = document.getElementById('videoElement');
-        if (mpegts.isSupported())
+
+        if (Hls.isSupported())
         {
-            var player = mpegts.createPlayer({
-                type: 'flv',  // could also be mpegts, m2ts, flv
-                isLive: true,
-                url: this.liveLink,
-                enableWorker: true, // 启用分离的线程进行转换
-                enableStashBuffer: false,
-                stashInitialSize: 128,
-                liveBufferLatencyChasing: true,
-                accurateSeek: true,
+            var hls = new Hls({
+                "enableWorker": true,
+                "lowLatencyMode": false,
+                "backBufferLength": 90
+            })
+            hls.loadSource(this.liveLink)
+            hls.attachMedia(videoElement)
+            hls.on(Hls.Events.MANIFEST_PARSED, function ()
+            {
+                videoElement.play();
             });
-            player.attachMediaElement(videoElement);
-            player.load();
-            player.play();
         }
     }
 };

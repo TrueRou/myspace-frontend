@@ -34,16 +34,6 @@
             <el-switch v-model="scope.row.message_available" />
           </template>
         </el-table-column>
-        <el-table-column width="120" prop="message_baidu_available" label="百度短信共享">
-          <template #default="scope">
-            <el-switch v-model="scope.row.message_baidu_available" />
-          </template>
-        </el-table-column>
-        <el-table-column width="120" prop="chat_available" label="ChatGPT">
-          <template #default="scope">
-            <el-switch v-model="scope.row.chat_available" />
-          </template>
-        </el-table-column>
         <el-table-column label="操作" width="180">
           <template #default="scope">
             <el-button type="primary" @click="handleEdit(scope.row)">保存</el-button>

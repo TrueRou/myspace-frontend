@@ -19,22 +19,8 @@ export const useUserStore = defineStore('user', () =>
     {
       const response = await axios.get(config.API_USER_ME, { headers: { "Authorization": `Bearer ${token}` } })
       this.userInfo = response.data
-      await checkChatGPT()
     }
   }
 
-  async function checkChatGPT()
-  {
-    const token = localStorage.getItem('token')
-    const available = userInfo.value['chat_available']
-    if (available)
-    {
-      await axios.get(config.API_CHATGPT_TOKEN, { headers: { "Authorization": `Bearer ${token}` } }).then((response) =>
-      {
-        localStorage.setItem('secret_token', response.data['token'])
-      })
-    }
-  }
-
-  return { userInfo, checkChatGPT, findUser, isLogin }
+  return { userInfo, findUser, isLogin }
 })
